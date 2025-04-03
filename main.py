@@ -34,15 +34,15 @@ async def webhook_handler(
     return JSONResponse({"status": "ok"})
 
 
-def signature_valid(payload: bytes, signature_header: str)-> bool:
-    if not signature_header or "=" not in signature_header:
-        return False
-    sha_name, received_signature = signature_header.split("=")
-    if sha_name != "sha256":
-        return False
-
-    mac = hmac.new(GITHUB_WEBHOOK_SECRET.encode(), msg=payload, digestmod=hashlib.sha256)
-    expected = mac.hexdigest()
-
-    return hmac.compare_digest(expected, received_signature)
+# def signature_valid(payload: bytes, signature_header: str)-> bool:
+#     if not signature_header or "=" not in signature_header:
+#         return False
+#     sha_name, received_signature = signature_header.split("=")
+#     if sha_name != "sha256":
+#         return False
+#
+#     mac = hmac.new(GITHUB_WEBHOOK_SECRET.encode(), msg=payload, digestmod=hashlib.sha256)
+#     expected = mac.hexdigest()
+#
+#     return hmac.compare_digest(expected, received_signature)
 
