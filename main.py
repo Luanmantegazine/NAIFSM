@@ -15,7 +15,6 @@ def home():
 @app.post("/webhook")
 async def webhook_handler(
     request: Request,
-    x_hub_signature_256: str = Header(None),
     x_github_event: str = Header("ping")
 ):
     body = request.body()
