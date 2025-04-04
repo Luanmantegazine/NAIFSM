@@ -27,7 +27,7 @@ async def webhook_handler(
     logging.info(f"Received event: {x_github_event} with payload: {payload}")
 
     if x_github_event == "ping":
-        return {"message": "Hi! This is a FastAPI webhook", "event": x_github_event, "payload": payload}
+        return {"message": "pong", "event": x_github_event, "payload": payload}
 
     if x_github_event != "push":
         raise HTTPException(
