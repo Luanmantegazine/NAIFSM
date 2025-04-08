@@ -23,11 +23,12 @@ async def webhook_handler(
             detail="Missing X-GitHub-Event header"
         )
 
+    event = x_github_event.strip().lower()
     payload = await request.json()
     logging.info(f"Received event: {x_github_event} with payload: {payload}")
 
     if x_github_event == "ping":
-        return {"message": "pong", "event": x_github_event, "payload": payload}
+        return {"message": "pong", "event": event, "payload": payload}
 
     if x_github_event != "push":
         logging.info("Processing push event")
