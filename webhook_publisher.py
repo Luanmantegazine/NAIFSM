@@ -55,7 +55,7 @@ class WebhookPublisher:
 
 if __name__ == '__main__':
     # Set up the webhook publisher with the receiver's endpoint and a secret key
-    webhook_url = "http://localhost:8000/webhook"  # Change as needed to match your receiver URL
+    webhook_url = "http://localhost:8000/"  # Change as needed to match your receiver URL
     secret_key = 'l12345'
 
     webhook_client = WebhookPublisher(webhook_url=webhook_url, secret_key=secret_key)
