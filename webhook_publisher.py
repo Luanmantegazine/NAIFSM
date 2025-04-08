@@ -15,7 +15,10 @@ class WebhookPublisher:
         timestamp = payload.get('timestamp', int(time.time()))
         payload['timestamp'] = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
-        headers = {'Content-Type': 'application/json'}
+        headers = {
+            'Content-Type': 'application/json',
+            'X-GitHub-Event': "push"
+        }
 
         payload_json = json.dumps(payload)
         try:
@@ -37,7 +40,7 @@ class WebhookPublisher:
 
 if __name__ == '__main__':
 
-    webhook_url = "http://localhost:8000/"  # Change as needed to match your receiver URL
+    webhook_url = "https://12d7-2804-14d-4c85-97de-211b-499f-fde5-121d.ngrok-free.app/webhook"  # Change as needed to match your receiver URL
 
     webhook_client = WebhookPublisher(webhook_url=webhook_url)
 
