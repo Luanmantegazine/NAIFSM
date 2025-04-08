@@ -30,13 +30,17 @@ async def webhook_handler(
         return {"message": "pong", "event": x_github_event, "payload": payload}
 
     if x_github_event != "push":
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Unsupported event type: {x_github_event}"
-        )
+        logging.info("Processing push event")
+        return {"message": "Push event received", "payload": payload}
 
-    logging.info("Processing push event")
-    return {"message": "Push event received", "payload": payload}
+    if x_github_event == "commit":
+        logging.info("Processing commit event")
+        return {"message": "Commit event received", "payload": payload}
+
+    raise HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail=f"Unsupported event type: {x_github_event}"
+    )
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
