@@ -14,10 +14,11 @@ class WebhookPublisher:
     def send_webhook(self, payload):
         timestamp = payload.get('timestamp', int(time.time()))
         payload['timestamp'] = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        event_type = payload.get("event", "push")
 
         headers = {
             'Content-Type': 'application/json',
-            'X-GitHub-Event': "push"
+            'X-GitHub-Event': event_type
         }
 
         payload_json = json.dumps(payload)
@@ -45,7 +46,7 @@ if __name__ == '__main__':
     webhook_client = WebhookPublisher(webhook_url=webhook_url)
 
     event_payload = {
-        "event": "push",
+        "event": "commit",
         "repository": {
             "name": "NAIFSM",
             "url": "https://github.com/Luanmantegazine/NAIFSM"
