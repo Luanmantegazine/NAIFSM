@@ -1,24 +1,31 @@
-import requests
 import json
 import datetime
 import time
+import hashlib
+import hmac
+import requests
 
 
 class WebhookPublisher:
-    def __init__(self, webhook_url):
+    def __init__(self, webhook_url, secret):
         self.webhook_url = webhook_url
+        self.secret = secret
 
     def send_webhook(self, payload):
         timestamp = payload.get('timestamp', int(time.time()))
         payload['timestamp'] = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         event_type = payload.get("event", "push")
+        payload_json = json.dumps(payload)
+
+        signature = hmac.new(self.secret.encode(), payload_json.encode(), hashlib.sha256).hexdigest()
+        header_signature = "sha256=" + signature
 
         headers = {
             'Content-Type': 'application/json',
-            'X-GitHub-Event': event_type
+            'X-GitHub-Event': event_type,
+            'X-Hub-Signature-256': header_signature
         }
 
-        payload_json = json.dumps(payload)
         try:
             response = requests.post(
                 self.webhook_url,
@@ -37,38 +44,12 @@ class WebhookPublisher:
 
 
 if __name__ == '__main__':
-
     webhook_url = "https://12d7-2804-14d-4c85-97de-211b-499f-fde5-121d.ngrok-free.app/webhook"
+    secret = "12345"
+    webhook_client = WebhookPublisher(webhook_url=webhook_url, secret=secret)
 
-    webhook_client = WebhookPublisher(webhook_url=webhook_url)
-
-    event_payload = {
+    sample_payload = {
         "event": "push",
-        "ref": "main",
-        "repository": {
-            "name": "NAIFSM",
-            "full_name": "Luanmantegazine/NAIFSM",
-            "url": "https://github.com/Luanmantegazine/NAIFSM"
-        },
-        "pusher": {
-            "name": "Luanmantegazine",
-
-        },
-        "commits": [
-            {
-                "id": "c1d2e3f4",
-                "message": "Initial commit",
-                "timestamp": "2020-01-01T12:00:00Z",
-                "url": "https://github.com/Luanmantegazine/NAIFSM/commit/c1d2e3f4",
-                "author": {
-                    "name": "Luanmantegazine",
-                }
-            },
-
-        ],
-        # Using the current Unix timestamp
-        "timestamp": int(time.time()),
+        "message": "Commit realizado com sucesso!"
     }
-
-    # Send the webhook event
-    webhook_client.send_webhook(event_payload)
+    webhook_client.send_webhook(sample_payload)
