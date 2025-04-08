@@ -46,14 +46,30 @@ if __name__ == '__main__':
     webhook_client = WebhookPublisher(webhook_url=webhook_url)
 
     event_payload = {
-        "event": "commit",
+        "event": "push",
+        "ref": "main",
         "repository": {
+            "id": 660779886,
             "name": "NAIFSM",
+            "full_name": "Luanmantegazine/NAIFSM",
             "url": "https://github.com/Luanmantegazine/NAIFSM"
         },
         "pusher": {
-            "name": "luanmantegazine"
+            "name": "Luanmantegazine",
+
         },
+        "commits": [
+            {
+                "id": "c1d2e3f4",
+                "message": "Initial commit",
+                "timestamp": "2020-01-01T12:00:00Z",
+                "url": "https://github.com/Luanmantegazine/NAIFSM/commit/c1d2e3f4",
+                "author": {
+                    "name": "Luanmantegazine",
+                }
+            },
+
+        ],
         # Using the current Unix timestamp
         "timestamp": int(time.time()),
     }
