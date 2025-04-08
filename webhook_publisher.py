@@ -1,9 +1,6 @@
-import hmac
 import requests
 import json
-import os
 import datetime
-import hashlib
 import time
 
 
@@ -41,7 +38,7 @@ class WebhookPublisher:
 
 if __name__ == '__main__':
 
-    webhook_url = "https://12d7-2804-14d-4c85-97de-211b-499f-fde5-121d.ngrok-free.app/webhook"  # Change as needed to match your receiver URL
+    webhook_url = "https://12d7-2804-14d-4c85-97de-211b-499f-fde5-121d.ngrok-free.app/webhook"
 
     webhook_client = WebhookPublisher(webhook_url=webhook_url)
 
@@ -49,7 +46,6 @@ if __name__ == '__main__':
         "event": "push",
         "ref": "main",
         "repository": {
-            "id": 660779886,
             "name": "NAIFSM",
             "full_name": "Luanmantegazine/NAIFSM",
             "url": "https://github.com/Luanmantegazine/NAIFSM"
