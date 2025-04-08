@@ -17,6 +17,7 @@ async def webhook_handler(
     request: Request,
     x_github_event: Optional[str] = Header(None)
 ):
+    logging.info(f"Raw X-GitHub-Event header: {x_github_event}")
     if not x_github_event:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -30,7 +31,7 @@ async def webhook_handler(
     if x_github_event == "ping":
         return {"message": "pong", "event": event, "payload": payload}
 
-    if x_github_event != "push":
+    if x_github_event == "push":
         logging.info("Processing push event")
         return {"message": "Push event received", "payload": payload}
 
