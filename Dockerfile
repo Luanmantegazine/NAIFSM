@@ -1,19 +1,15 @@
-# Use an official Raspberry Pi 3 image as the base image
-FROM node:10-alpine
+# Use a modern Node.js version
+FROM node:18-alpine
 
-#RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
-#RUN python3 -m ensurepip
-#RUN pip3 install --no-cache --upgrade pip setuptools
-
-# Create the app directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy the HTML file to the app directory in the container
+# Copy the file
 COPY hello.js .
-#COPY helloworldp.py .
 
-# Serve the HTML file using an HTTP server
-CMD [ "node", "hello.js" ]
-#CMD [ "python", "helloworldp.py" ]
+# Install dependencies or add more steps
+# RUN npm install
 
-EXPOSE 8080
+CMD ["node", "hello.js"]
+
+EXPOSE 8000
