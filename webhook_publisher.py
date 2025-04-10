@@ -44,7 +44,7 @@ class WebhookPublisher:
 
 
 if __name__ == '__main__':
-    webhook_url = "https://6584-189-6-250-125.ngrok-free.app/webhook"
+    webhook_url = "https://c430-2804-14d-4c85-97de-592-d8-dfff-cc94.ngrok-free.app/webhook"
     secret = "12345"
     publisher = WebhookPublisher(webhook_url=webhook_url, secret=secret)
 
