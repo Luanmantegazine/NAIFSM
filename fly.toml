@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for naifsm-weathered-leaf-9668 on 2025-04-09T14:35:14-03:00
+# fly.toml app configuration file generated for webhookapp on 2025-04-10T21:09:06-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'naifsm_data'
+app = 'webhookapp'
 primary_region = 'gru'
 
 [build]
@@ -17,6 +17,4 @@ primary_region = 'gru'
   processes = ['app']
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
+  size = 'shared-cpu-1x'
