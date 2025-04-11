@@ -4,6 +4,7 @@ import time
 import hashlib
 import hmac
 import requests
+import subprocess
 
 
 class WebhookPublisher:
@@ -43,9 +44,21 @@ class WebhookPublisher:
         return response
 
 
+def get_status(repo_path="."):
+
+    try:
+        commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=repo_path).strip().decode("utf-8")
+        return commit
+    except Exception as e:
+        print("Error: {e}")
+        return None
+
+
+
 if __name__ == '__main__':
-    webhook_url = "https://c430-2804-14d-4c85-97de-592-d8-dfff-cc94.ngrok-free.app/webhook"
+    webhook_url = "http://localhost:8000/webhook"
     secret = "12345"
+    repo_path = "https://github.com/Luanmantegazine/NAIFSM"
     publisher = WebhookPublisher(webhook_url=webhook_url, secret=secret)
 
     while True:

@@ -3,11 +3,15 @@ import logging
 import hmac
 import hashlib
 
-from typing import Optional
+from typing import Optional, Dict, Any
 from fastapi import FastAPI, Request, Header, HTTPException, status
+from fastapi.responses import JSONResponse
 import uvicorn
 
 WEBHOOK_SECRET = "12345"
+
+logger = logging.getLogger("github_webhook")
+logging.basicConfig(level=logging.INFO)
 
 
 def verify_signature(payload_body: bytes, signature: str) -> bool:
@@ -19,10 +23,8 @@ def verify_signature(payload_body: bytes, signature: str) -> bool:
 
 app = FastAPI()
 
-logging.basicConfig(level=logging.INFO)
 
-
-@app.get("/", response_model=dict)
+@app.get("/", response_model=Dict[str, str])
 def home():
     return {"message": "GitHub Webhook is running!"}
 
@@ -55,26 +57,20 @@ async def webhook_handler(
         )
 
     payload = json.loads(body_bytes)
-
     logging.info(f"Received event: {x_github_event} with payload: {payload}")
-
     event = x_github_event.strip().lower()
 
-    if event == "ping":
-        return {"message": "pong", "event": event, "payload": payload}
+    event_handlers = {
+        "ping": lambda pl: {"message": "pong", "event": event, "payload": pl},
+        "push": lambda pl: {"message": "Push event received", "payload": pl},
+        "commit": lambda pl: {"message": "Commit event received", "payload": pl},
+    }
 
-    if event == "push":
-        logging.info("Processing push event")
-        return {"message": "Push event received", "payload": payload}
+    if event in event_handlers:
+        response = event_handlers[event](payload)
+        return JSONResponse(content=response)
 
-    if event == "commit":
-        logging.info("Processing commit event")
-        return {"message": "Commit event received", "payload": payload}
-
-    raise HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail=f"Unsupported event type: {x_github_event}"
-    )
+    logger.warning("Unsupported event type: %s", event)
 
 
 if __name__ == "__main__":
